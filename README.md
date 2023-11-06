@@ -1,13 +1,8 @@
-Cosas en las que sigo trabajando: el crud de el alumno y el del maestro.
+Los requerimientos para el alumno y el maestr no los pude seguir avanzando 
+porque no logre que me leyera la informacion del usuario en cuestion, osea me hace la validacion de el rol que tiene 
+pero no logre agarrar la informacion del usuario como tal, por eso no pude seguir avanzando en esos dos puntos
+Del resto toda la logica esta funcional, no me dio tiempo para meterle más diseño, son las 5am del lunes y luche hasta el final pero no logre debugear mi programa :/
 
-El admin ya puede hacer todas las cosas que pidio el trabajo
+Intente igual siguiendo un tutorial para implementar el DataTables y no lo logre ni con cdn ni instalacion con npm.
 
-Me falto el diseño en la vista el alumno y del maestro 
-
-el admin@admin.com ingresa con admin
-
-maestros con maestro
-
-alumnos con alumno
-
-Al cambiar el rol del usuario tambien cambia la contraseña y se procede a tener que editar su nueva informacion en el rol indicado, solo me falto hashear la contraseña pq estaba testando que si hiciera el cambio de la contraseña.
+Espero el feedback correspondiente. 
