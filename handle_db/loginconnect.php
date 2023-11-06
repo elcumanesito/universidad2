@@ -20,7 +20,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($user) {
         // Inicia la sesión y guarda la información del usuario
         $_SESSION['logged_in'] = true;
-        $_SESSION['user_id'] = $user['id'];
+
+        // Utiliza el id correspondiente según el rol
+        if ($user['rol_id'] == 3) {
+            // Usuario con rol de alumno
+            $_SESSION['user_id'] = $user['alumno_id'];
+
+            // Obtener información adicional del alumno
+            $query_alumno_info = "SELECT id, nombre, apellido FROM alumnos WHERE id = :alumno_id";
+            $statement_alumno_info = $pdo->prepare($query_alumno_info);
+            $statement_alumno_info->bindParam(":alumno_id", $_SESSION['user_id']);
+            $statement_alumno_info->execute();
+            $alumno_info = $statement_alumno_info->fetch(PDO::FETCH_ASSOC);
+            $_SESSION['alumno_info'] = $alumno_info;
+
+        } elseif ($user['rol_id'] == 2) {
+            // Usuario con rol de maestro
+            $_SESSION['user_id'] = $user['maestro_id'];
+
+            // Obtener información adicional del maestro
+            $query_maestro_info = "SELECT id, nombre FROM maestros WHERE id = :maestro_id";
+            $statement_maestro_info = $pdo->prepare($query_maestro_info);
+            $statement_maestro_info->bindParam(":maestro_id", $_SESSION['user_id']);
+            $statement_maestro_info->execute();
+            $maestro_info = $statement_maestro_info->fetch(PDO::FETCH_ASSOC);
+            $_SESSION['maestro_info'] = $maestro_info;
+
+        } else {
+            // Otros roles
+            $_SESSION['user_id'] = $user['id'];
+        }
+
         $_SESSION['user_role'] = $user['rol_id'];
 
         // Redirecciona basado en el rol del usuario

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "datatables.net-dt": "^1.13.7",
     "tailwindcss": "^3.3.5"
   }
 }
