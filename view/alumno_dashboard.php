@@ -1,28 +1,33 @@
 <?php
 session_start();
+
 require_once "../config/database.php";
 require_once "../handle_db/logout.php";
+
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
-// Obtener nombre y apellido del alumno
+
 $alumno_id = $_SESSION['user_id'];
-// Cambia la consulta para unir las tablas usuarios y alumnos
+
+
+// Cambia la consulta para obtener información del alumno
 $query_obtener_alumno = "
-    SELECT alumnos.nombre, alumnos.apellido
+    SELECT id, nombre, apellido
     FROM alumnos
-    JOIN usuarios ON alumnos.usuario_id = usuarios.id
-    WHERE alumnos.usuario_id = :alumnoId
+    WHERE usuario_id = :alumnoId
 ";
 $statement_obtener_alumno = $pdo->prepare($query_obtener_alumno);
 $statement_obtener_alumno->bindParam(':alumnoId', $alumno_id);
 $statement_obtener_alumno->execute();
 $alumno = $statement_obtener_alumno->fetch(PDO::FETCH_ASSOC);
+ 
 if (isset($_GET['accion']) && $_GET['accion'] == 'calificaciones') {
     header("Location: alumno_calificaciones.php");
     exit();
 }
+
 if (isset($_GET['accion']) && $_GET['accion'] == 'clases') {
     header("Location: alumno_clases.php");
     exit();
@@ -45,13 +50,14 @@ if (isset($_GET['accion']) && $_GET['accion'] == 'clases') {
     </div>
     <div class="p-4 border-b border-white">
     <h5>Alumno</h5>
-            <h4><?php
-if (is_array($alumno) && isset($alumno['nombre'], $alumno['apellido'])) {
-    echo "<h4>{$alumno['nombre']} {$alumno['apellido']}</h4>";
+            <h4> <?php
+if (isset($_SESSION['alumno_info'])) {
+    $alumno_info = $_SESSION['alumno_info'];
+    echo "<h4>{$alumno_info['nombre']} {$alumno_info['apellido']}</h4>";
 } else {
     echo "<h4>Error al obtener información del alumno</h4>";
 }
-?>
+?></h4>
     </div>
     <div class="p-4 border-b border-white">
               

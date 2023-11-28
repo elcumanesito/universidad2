@@ -8,6 +8,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
+var_dump($_SESSION);
+
 if (isset($_GET['accion']) && $_GET['accion'] == 'maestros') {
     header("Location: maestros_crud.php");
     exit();

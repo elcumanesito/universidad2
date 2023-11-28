@@ -9,6 +9,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit();
 }
 
+
 // Inicializar variables de maestro
 $maestroNombre = "Administrador";
 
@@ -23,32 +24,27 @@ if ($_SESSION['user_role'] == 2) {
                               WHERE usuarios.id = :userId";
     $statement_obtener_maestro = $pdo->prepare($query_obtener_maestro);
     $statement_obtener_maestro->bindParam(':userId', $user_id);
-    
-    // Salida de depuración
-    var_dump($statement_obtener_maestro->errorInfo());
 
-    try {
-        $statement_obtener_maestro->execute();
-        
-        // Verificar si la consulta devolvió resultados
-        if ($statement_obtener_maestro->rowCount() > 0) {
-            $maestro = $statement_obtener_maestro->fetch(PDO::FETCH_ASSOC);
+    // Manejo de errores más detallado
+    if (!$statement_obtener_maestro->execute()) {
+        print_r($statement_obtener_maestro->errorInfo());
+    }
 
-            // Salida de depuración
-            var_dump($maestro);
+    // Verificar si la consulta devolvió resultados
+    if ($statement_obtener_maestro->rowCount() > 0) {
+        $maestro = $statement_obtener_maestro->fetch(PDO::FETCH_ASSOC);
 
-            $maestroNombre = $maestro['nombre'];
-        } else {
-            echo "No se encontraron resultados para el maestro con ID: $user_id";
-        }
-    } catch (PDOException $e) {
-        echo "Error en la ejecución de la consulta: " . $e->getMessage();
+        $maestroNombre = $maestro['nombre'];
+    } else {
+        echo "No se encontraron resultados para el maestro con ID: $user_id";
     }
 }
+
+if (isset($_GET['accion']) && $_GET['accion'] == 'alumnos') {
+    header("Location: maestro_alumnos.php");
+    exit();
+}
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,10 +62,10 @@ if ($_SESSION['user_role'] == 2) {
     </div>
     <div class="p-4 border-b border-white">
         <h5 class="mb-2">Maestro</h5>
-        <h5 class="mb-2"><?php $maestroNombre ?></h5>
+        <h5 class="mb-2"><?php echo $maestroNombre ?></h5>
     </div>
     <div class="p-4">
-        <h5 class="mb-4 flex justify-center ">MENU ADMINISTRACION</h5>
+        <h5 class="mb-4 flex justify-center ">MENU MAESTROS</h5>
         <p class="mb-5"><a href="?accion=alumnos">Alumnos</a></p>
     </div>
 </div>
@@ -81,7 +77,7 @@ if ($_SESSION['user_role'] == 2) {
             <div class="4 bg-[#f5f6fa] w-[1080px] h-[555px] flex justify-center items-center">
         <div class="5 bg-white p-8 rounded-md">
             <h1 class="text-center font-bold">Dashboard</h1>
-            <p>Debido a que no pude recibir la informacion del maestro que ingreso, no pude seguir avanzando con el programa :/ </p>
+            <p>Bienvenido, selecciona la acción que quieras realizar en las pestañas del menú de la izquierda</p>
         </div>
     </div>
         </div>
