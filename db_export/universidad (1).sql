@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-11-2023 a las 21:17:24
+-- Tiempo de generación: 28-11-2023 a las 22:39:47
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -43,7 +43,7 @@ CREATE TABLE `alumnos` (
 --
 
 INSERT INTO `alumnos` (`id`, `usuario_id`, `dni`, `correo`, `nombre`, `apellido`, `direccion`, `fecha_nacimiento`) VALUES
-(24, 26, '03490231', 'pepe@gmail.com', 'Holiwiris', 'Gonzalis', 'queteimporta', '12/14/15');
+(28, 35, '03490231', 'test@test.com', 'Daniel', 'Gonzalis', 'Jejejojo', '12/14/14');
 
 -- --------------------------------------------------------
 
@@ -56,25 +56,6 @@ CREATE TABLE `alumnos_clases` (
   `alumno_id` int(11) DEFAULT NULL,
   `clase_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `alumnos_clases`
---
-
-INSERT INTO `alumnos_clases` (`id`, `alumno_id`, `clase_id`) VALUES
-(2, NULL, 4),
-(3, NULL, 1),
-(4, NULL, 2),
-(5, NULL, 4),
-(6, NULL, 2),
-(7, NULL, 2),
-(8, NULL, 4),
-(9, NULL, 1),
-(10, NULL, 2),
-(11, NULL, 4),
-(12, NULL, 1),
-(13, NULL, 1),
-(14, NULL, 4);
 
 -- --------------------------------------------------------
 
@@ -172,11 +153,10 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `correo`, `contrasena`, `rol_id`) VALUES
 (1, 'admin@admin.com', 'admin', 1),
-(24, 'test@test.com', 'alumno', 3),
-(26, 'pepe@gmail.com', 'alumno', 3),
 (29, 'daniel@gmail.com', 'maestro', 2),
 (30, 'probando@gmail.com', 'maestro', 2),
-(32, 'pepe@gmail.com', 'maestro', 2);
+(32, 'pepe@gmail.com', 'maestro', 2),
+(35, 'test@test.com', 'alumno', 3);
 
 --
 -- Índices para tablas volcadas
@@ -187,15 +167,15 @@ INSERT INTO `usuarios` (`id`, `correo`, `contrasena`, `rol_id`) VALUES
 --
 ALTER TABLE `alumnos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `alumnos_ibfk_1` (`usuario_id`);
+  ADD KEY `fk_alumnos_usuarios` (`usuario_id`);
 
 --
 -- Indices de la tabla `alumnos_clases`
 --
 ALTER TABLE `alumnos_clases`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `alumno_id` (`alumno_id`),
-  ADD KEY `clase_id` (`clase_id`);
+  ADD KEY `clase_id` (`clase_id`),
+  ADD KEY `fk_alumnos` (`alumno_id`);
 
 --
 -- Indices de la tabla `clases`
@@ -239,13 +219,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `alumnos`
 --
 ALTER TABLE `alumnos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `alumnos_clases`
 --
 ALTER TABLE `alumnos_clases`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT de la tabla `clases`
@@ -275,7 +255,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Restricciones para tablas volcadas
@@ -285,14 +265,16 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `alumnos`
 --
 ALTER TABLE `alumnos`
-  ADD CONSTRAINT `alumnos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `alumnos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_alumnos_usuarios` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `alumnos_clases`
 --
 ALTER TABLE `alumnos_clases`
   ADD CONSTRAINT `alumnos_clases_ibfk_1` FOREIGN KEY (`alumno_id`) REFERENCES `alumnos` (`id`),
-  ADD CONSTRAINT `alumnos_clases_ibfk_2` FOREIGN KEY (`clase_id`) REFERENCES `clases` (`id`);
+  ADD CONSTRAINT `alumnos_clases_ibfk_2` FOREIGN KEY (`clase_id`) REFERENCES `clases` (`id`),
+  ADD CONSTRAINT `fk_alumnos` FOREIGN KEY (`alumno_id`) REFERENCES `alumnos` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `maestros`
